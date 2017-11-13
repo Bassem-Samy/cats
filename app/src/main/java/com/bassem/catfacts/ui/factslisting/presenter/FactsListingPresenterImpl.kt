@@ -4,6 +4,7 @@ import android.content.Context
 import com.bassem.catfacts.ui.factslisting.interactor.FactsListingInteractor
 import com.bassem.catfacts.ui.factslisting.models.CatFactsResponse
 import com.bassem.catfacts.ui.factslisting.view.FactsListingView
+import com.bassem.catfacts.utils.NetworkHelper
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -28,7 +29,12 @@ class FactsListingPresenterImpl(val factsView: FactsListingView,
         if (!canLoadMore()) {
             return
         }
+
         disposeRequest()
+        if (!NetworkHelper.hasInternet(contextWeakReference.get())) {
+            factsView.showNoInternetConnection()
+            return
+        }
         currentPage++
         isLoading = true
         factsInteractor.getCatFacts(maxLength, pageSize, currentPage)
@@ -48,7 +54,7 @@ class FactsListingPresenterImpl(val factsView: FactsListingView,
                 })
     }
 
-    private fun canLoadMore(): Boolean = currentPage < lastPage && !isLoading
+    private fun canLoadMore(): Boolean = currentPage < lastPage && !isLoading && pageSize > 0
 
     private fun disposeRequest() {
 

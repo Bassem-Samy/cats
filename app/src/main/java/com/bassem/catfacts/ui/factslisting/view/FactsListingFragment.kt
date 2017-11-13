@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,6 +21,10 @@ import com.bassem.catfacts.ui.factslisting.adapters.FactsListingAdapter
 import com.bassem.catfacts.ui.factslisting.di.FactsListingModule
 import com.bassem.catfacts.ui.factslisting.models.CatFact
 import com.bassem.catfacts.ui.factslisting.presenter.FactsListingPresenter
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import java.util.*
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 /**
@@ -33,8 +38,6 @@ import javax.inject.Inject
 class FactsListingFragment : Fragment(), FactsListingView {
 
 
-    val pageSize: Int = 20
-    val factsContentMax: Int = 1000
     @BindView(R.id.sb_facts_length)
     lateinit var factsLengthSeekBar: SeekBar
     @BindView(R.id.txt_selected_length)
@@ -44,6 +47,43 @@ class FactsListingFragment : Fragment(), FactsListingView {
     var adapter: FactsListingAdapter? = null
     @Inject
     lateinit var presenter: FactsListingPresenter
+    private var mListener: OnFragmentInteractionListener? = null
+
+    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
+        // Inflate the layout for this fragment
+        val view = inflater!!.inflate(R.layout.fragment_facts_listing, container, false)
+        ButterKnife.bind(this, view)
+        return view
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        // inject dependencies
+        CatFactsApplication.get(activity.application)
+                .applicationComponent
+                .plus(FactsListingModule(this, context))
+                .inject(this)
+        initializeFactsContentSeekBar()
+    }
+
+    /**
+     * setup the seek bar and create the observable to listen to value changes
+     */
+    private fun initializeFactsContentSeekBar() {
+        factsLengthSeekBar.max = FACTS_MAX_CONTENT
+        presenter.loadMoreItems()
+        createSeekBarObservable().debounce(SEEK_BAR_WAIT_TIME_IN_MILLIS, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ t1 ->
+                    Log.e("t1", t1.toString())
+                    adapter?.clearDataset()
+                    presenter?.updateFactsLengthValues(t1, PAGE_SIZE)
+                    presenter?.loadMoreItems()
+                })
+        factsLengthSeekBar.progress = FACTS_MAX_CONTENT / 2
+
+    }
 
     override fun showLoading() {
     }
@@ -60,6 +100,9 @@ class FactsListingFragment : Fragment(), FactsListingView {
     override fun showNoInternetConnection() {
     }
 
+    /**
+     * Update UI with items to display
+     */
     override fun updateFacts(items: List<CatFact>) {
         if (adapter == null) {
             adapter = FactsListingAdapter(onFactItemClickListener)
@@ -67,12 +110,16 @@ class FactsListingFragment : Fragment(), FactsListingView {
             factsRecyclerView.layoutManager = linearLayoutManager
             factsRecyclerView.adapter = adapter
             adapter?.setDataset(items)
+            factsRecyclerView.setOnScrolledToEndListener { presenter.loadMoreItems() }
         } else {
             adapter?.addItems(items)
         }
 
     }
 
+    /**
+     * Click listener for the listing of facts
+     */
     private val onFactItemClickListener = object : FactsListingAdapter.FactItemOnClickListener {
         override fun onShareClicked(item: CatFact) {
         }
@@ -80,7 +127,6 @@ class FactsListingFragment : Fragment(), FactsListingView {
         override fun onItemClicked(item: CatFact) {
         }
     }
-    private var mListener: OnFragmentInteractionListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,39 +134,32 @@ class FactsListingFragment : Fragment(), FactsListingView {
 
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        val view = inflater!!.inflate(R.layout.fragment_facts_listing, container, false)
-        ButterKnife.bind(this, view)
-        return view
-    }
+    /**
+     * create an observable for the seek bar setOnSeekBarChangeListener
+     * The point is not call the api hundreds of times whenever the value is changed
+     * but to use debounce on that observable to wait for some milliseconds (user stopped changing the seek bar value)
+     * and then call the api
+     */
+    private fun createSeekBarObservable(): Observable<Int> {
+        return io.reactivex.Observable.create { emmitter ->
+            factsLengthSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
+                    selectedContentLengthTextView.text = p1.toString()
+                    emmitter.onNext(p1)
+                }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        CatFactsApplication.get(activity.application)
-                .applicationComponent
-                .plus(FactsListingModule(this, context))
-                .inject(this)
-        factsLengthSeekBar.max = factsContentMax
-        factsLengthSeekBar.setOnSeekBarChangeListener(onSeekBarChangeListener)
-        presenter.updateFactsLengthValues(100, pageSize)
-        presenter.loadMoreItems()
-    }
+                override fun onStartTrackingTouch(p0: SeekBar?) {
 
-    var onSeekBarChangeListener: SeekBar.OnSeekBarChangeListener = object : SeekBar.OnSeekBarChangeListener {
-        override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
-            selectedContentLengthTextView.text = Integer.toString(i)
-        }
+                }
 
-        override fun onStartTrackingTouch(seekBar: SeekBar) {
+                override fun onStopTrackingTouch(p0: SeekBar?) {
 
-        }
-
-        override fun onStopTrackingTouch(seekBar: SeekBar) {
-
+                }
+            })
+            emmitter.setCancellable { factsLengthSeekBar.setOnSeekBarChangeListener(null) }
         }
     }
+
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -129,6 +168,12 @@ class FactsListingFragment : Fragment(), FactsListingView {
         } else {
             throw RuntimeException(context!!.toString() + " must implement OnFragmentInteractionListener")
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        presenter?.onDestroy()
+
     }
 
     override fun onDetach() {
@@ -148,7 +193,11 @@ class FactsListingFragment : Fragment(), FactsListingView {
 
     companion object {
 
+        val SEEK_BAR_WAIT_TIME_IN_MILLIS = 250L
         val TAG: String = "facts_listing_fragment"
+
+        val PAGE_SIZE: Int = 20
+        val FACTS_MAX_CONTENT: Int = 1000
         /**
          * Use this factory method to create a new instance of
          * this fragment using the provided parameters.

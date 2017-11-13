@@ -71,5 +71,10 @@ class FactsListingAdapter(factItemOnClickListener: FactItemOnClickListener) : Re
         fun onItemClicked(item: CatFact)
         fun onShareClicked(item: CatFact)
     }
+
+    fun clearDataset() {
+        dataSet?.clear()
+        notifyDataSetChanged()
+    }
 }
 
