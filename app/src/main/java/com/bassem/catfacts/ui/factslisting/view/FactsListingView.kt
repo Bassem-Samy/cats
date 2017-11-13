@@ -1,5 +1,6 @@
 package com.bassem.catfacts.ui.factslisting.view
 
+import com.bassem.catfacts.ui.factslisting.models.CatFact
 import com.bassem.catfacts.utils.BaseView
 
 /**
@@ -10,4 +11,5 @@ import com.bassem.catfacts.utils.BaseView
 interface FactsListingView : BaseView {
     fun showNoFacts()
     fun showError()
+    fun updateFacts(items: List<CatFact>)
 }

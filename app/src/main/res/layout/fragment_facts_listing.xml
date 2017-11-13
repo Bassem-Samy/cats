@@ -1,12 +1,27 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.bassem.catfacts.ui.factslisting.view.FactsListingFragment">
 
+
+    <SeekBar
+        android:id="@+id/sb_facts_length"
+        android:layout_width="match_parent"
+
+        android:layout_height="wrap_content" />
+
     <TextView
+        android:id="@+id/txt_selected_length"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/sb_facts_length"
+        android:layout_centerHorizontal="true"
+        tools:text="100" />
+
+    <com.bassem.catfacts.ui.controls.LoadMoreRecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
-
-</FrameLayout>
+        android:layout_below="@id/txt_selected_length"
+        android:id="@+id/rclr_facts"></com.bassem.catfacts.ui.controls.LoadMoreRecyclerView>
+</RelativeLayout>

@@ -39,6 +39,7 @@ class FactsListingPresenterImpl(val factsView: FactsListingView,
                     if (res != null) {
                         lastPage = res.lastPage
                         //update view
+                        factsView.updateFacts(res.data)
 
                     }
                 }, {
