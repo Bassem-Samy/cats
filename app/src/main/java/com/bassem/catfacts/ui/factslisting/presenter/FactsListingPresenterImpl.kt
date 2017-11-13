@@ -16,7 +16,7 @@ import java.lang.ref.WeakReference
 
 class FactsListingPresenterImpl(val factsView: FactsListingView,
                                 val factsInteractor: FactsListingInteractor,
-                                context: Context) : FactsListingPresenter {
+                                context: Context?) : FactsListingPresenter {
     val contextWeakReference = WeakReference(context)
     var requestDisposable: Disposable? = null
     var pageSize: Int = 0

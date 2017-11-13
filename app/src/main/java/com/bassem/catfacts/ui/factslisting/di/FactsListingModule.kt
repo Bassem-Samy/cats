@@ -25,11 +25,11 @@ class FactsListingModule(private val mView: FactsListingView, context: Context) 
     // provides context for initializing the presenter
     @FactsListingScope
     @Provides
-    fun providesContext(): Context? = contextWeakReference?.get()
+    fun providesContext(): Context? = contextWeakReference.get()
 
     @FactsListingScope
     @Provides
-    fun providesFactsListingView(): FactsListingView? = mView
+    fun providesFactsListingView(): FactsListingView = mView
 
     @FactsListingScope
     @Provides
@@ -41,5 +41,5 @@ class FactsListingModule(private val mView: FactsListingView, context: Context) 
 
     @FactsListingScope
     @Provides
-    fun providesFactsListingPresenter(view: FactsListingView, interactor: FactsListingInteractor, context: Context): FactsListingPresenter = FactsListingPresenterImpl(view, interactor, context)
+    fun providesFactsListingPresenter(view: FactsListingView, interactor: FactsListingInteractor, context: Context?): FactsListingPresenter = FactsListingPresenterImpl(view, interactor, context)
 }
