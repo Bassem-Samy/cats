@@ -1,5 +1,8 @@
 package com.bassem.catfacts.application.di;
 
+import com.bassem.catfacts.ui.factslisting.di.FactsListingModule;
+import com.bassem.catfacts.ui.factslisting.di.FactsListingSubComponent;
+
 import dagger.Component;
 import dagger.Module;
 
@@ -10,4 +13,5 @@ import dagger.Module;
 
 @Component(modules = {ApplicationModule.class})
 public interface ApplicationComponent {
+    FactsListingSubComponent plus(FactsListingModule module);
 }
