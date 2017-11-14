@@ -2,6 +2,9 @@ package com.bassem.catfacts.application.di;
 
 import android.app.Application;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import javax.inject.Named;
 import javax.inject.Singleton;
 
@@ -37,7 +40,8 @@ public class ApplicationModule {
     @Singleton
     @Provides
     Converter.Factory providesConverterFactory() {
-        return GsonConverterFactory.create();
+        Gson gson=new GsonBuilder().disableHtmlEscaping().create();
+        return GsonConverterFactory.create(gson);
     }
 
     @Singleton

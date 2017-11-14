@@ -144,6 +144,7 @@ class FactsListingFragment : Fragment(), FactsListingView {
         }
 
         override fun onItemClicked(item: CatFact) {
+            mListener?.onFactClicked(item)
         }
     }
 

@@ -1,6 +1,9 @@
 package com.bassem.catfacts.ui.factslisting.adapters
 
+import android.os.Build
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
+import android.text.Html
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -42,7 +45,13 @@ class FactsListingAdapter(factItemOnClickListener: FactItemOnClickListener) : Re
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.factTextView.text = dataSet?.get(position)?.fact
+        //   holder.factTextView.text = dataSet?.get(position)?.fact
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            holder.factTextView.text = (Html.fromHtml(dataSet?.get(position)?.fact, Html.FROM_HTML_MODE_COMPACT))
+        } else {
+
+            holder.factTextView.text = (Html.fromHtml(dataSet?.get(position)?.fact))
+        }
     }
 
     override fun getItemCount(): Int {
@@ -64,6 +73,15 @@ class FactsListingAdapter(factItemOnClickListener: FactItemOnClickListener) : Re
                 onItemClickListener.onShareClicked(item)
             }
 
+        }
+
+        @OnClick(R.id.txt_fact)
+        fun onFactClicked() {
+            Log.e("position", Integer.toString(adapterPosition))
+            val item: CatFact? = dataSet?.get(adapterPosition)
+            if (item != null && onItemClickListener != null) {
+                onItemClickListener.onItemClicked(item)
+            }
         }
     }
 

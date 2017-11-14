@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.SeekBar;
 
+import com.bassem.catfacts.ui.factdetails.FactDetailsFragment;
 import com.bassem.catfacts.ui.factslisting.models.CatFact;
 import com.bassem.catfacts.ui.factslisting.view.FactsListingFragment;
 
@@ -29,6 +30,9 @@ public class MainActivity extends AppCompatActivity implements FactsListingFragm
 
     @Override
     public void onFactClicked(CatFact catFact) {
+        FactDetailsFragment fragment=FactDetailsFragment.newInstance(catFact);
+        fragment.show(getSupportFragmentManager(),FactDetailsFragment.TAG);
+
 
     }
     SeekBar.OnSeekBarChangeListener onSeekBarChangeListener=new SeekBar.OnSeekBarChangeListener() {
