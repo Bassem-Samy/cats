@@ -1,14 +1,17 @@
 package com.bassem.catfacts;
 
+import android.content.Intent;
+import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.SeekBar;
+import android.widget.Toast;
 
 import com.bassem.catfacts.ui.factdetails.FactDetailsFragment;
 import com.bassem.catfacts.ui.factslisting.models.CatFact;
 import com.bassem.catfacts.ui.factslisting.view.FactsListingFragment;
 
-public class MainActivity extends AppCompatActivity implements FactsListingFragment.OnFragmentInteractionListener{
+public class MainActivity extends AppCompatActivity implements FactsListingFragment.OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,25 +33,24 @@ public class MainActivity extends AppCompatActivity implements FactsListingFragm
 
     @Override
     public void onFactClicked(CatFact catFact) {
-        FactDetailsFragment fragment=FactDetailsFragment.newInstance(catFact);
-        fragment.show(getSupportFragmentManager(),FactDetailsFragment.TAG);
-
+        FactDetailsFragment fragment = FactDetailsFragment.newInstance(catFact);
+        fragment.show(getSupportFragmentManager(), FactDetailsFragment.TAG);
 
     }
-    SeekBar.OnSeekBarChangeListener onSeekBarChangeListener=new SeekBar.OnSeekBarChangeListener() {
-        @Override
-        public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
 
+    @Override
+    public void onShareFactClicked(CatFact catFact) {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.putExtra(Intent.EXTRA_TEXT, catFact.getFact());
+        if (shareIntent.resolveActivity(getPackageManager()) != null) {
+            startActivity(Intent.createChooser(shareIntent, getString(R.string.share_fact)));
+        } else {
+            showToast(R.string.no_app_to_share_to);
         }
 
-        @Override
-        public void onStartTrackingTouch(SeekBar seekBar) {
+    }
 
-        }
-
-        @Override
-        public void onStopTrackingTouch(SeekBar seekBar) {
-
-        }
-    };
+    private void showToast(@StringRes int msg) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
 }

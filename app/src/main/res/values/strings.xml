@@ -7,4 +7,8 @@
     <string name="no_data_with_that_content_length">There is no data with that content length</string>
     <string name="fact_dialog_title">Fact</string>
     <string name="fact">Fact</string>
+    <string name="share_fact">Share Fact</string>
+    <string name="no_app_to_share_to">There is no app to share the fact to</string>
+    <string name="no_internet_message">There\'s no internet connection, tap to try again!</string>
+    <string name="cant_load_more_no_internet">Can\'t load more items, check your internet connection</string>
 </resources>

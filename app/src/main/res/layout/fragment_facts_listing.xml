@@ -70,10 +70,10 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:visibility="gone"
         android:id="@+id/rltv_no_data"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:visibility="gone">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -90,5 +90,29 @@
             android:layout_margin="@dimen/margin5"
             android:gravity="center"
             android:text="@string/no_data_with_that_content_length" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rltv_no_internet_connection"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/img_no_internet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/tv_no_internet"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/no_internet_image" />
+
+        <TextView
+            android:id="@+id/tv_no_internet"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_margin="@dimen/margin5"
+            android:gravity="center"
+            android:text="@string/no_internet_message" />
+
     </RelativeLayout>
 </RelativeLayout>

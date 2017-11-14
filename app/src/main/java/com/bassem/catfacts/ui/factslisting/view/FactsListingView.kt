@@ -13,4 +13,5 @@ interface FactsListingView : BaseView {
     fun showError()
     fun updateFacts(items: List<CatFact>)
     fun showLoadingMore()
+    fun showCantLoadMoreNoInternet();
 }

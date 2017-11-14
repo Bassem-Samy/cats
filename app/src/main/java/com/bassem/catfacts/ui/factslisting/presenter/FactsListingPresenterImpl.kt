@@ -27,12 +27,17 @@ class FactsListingPresenterImpl(val factsView: FactsListingView,
     var isLoading: Boolean = false
     override fun loadMoreItems() {
         if (!canLoadMore()) {
+
             return
         }
 
         disposeRequest()
         if (!NetworkHelper.hasInternet(contextWeakReference.get())) {
-            factsView.showNoInternetConnection()
+            if (currentPage == 0) {
+                factsView.showNoInternetConnection()
+            } else {
+                factsView.showCantLoadMoreNoInternet()
+            }
             return
         }
         currentPage++
@@ -56,7 +61,7 @@ class FactsListingPresenterImpl(val factsView: FactsListingView,
                         factsView.updateFacts(res.data)
 
 
-                    }else{
+                    } else {
                         factsView.showNoFacts()
                     }
                 }, {

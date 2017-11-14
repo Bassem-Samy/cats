@@ -3,18 +3,17 @@ package com.bassem.catfacts.ui.factslisting.view
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
+import android.support.annotation.StringRes
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
-import android.widget.RelativeLayout
-import android.widget.SeekBar
-import android.widget.TextView
+import android.widget.*
 import butterknife.BindView
 import butterknife.ButterKnife
+import butterknife.OnClick
 
 import com.bassem.catfacts.R
 import com.bassem.catfacts.application.CatFactsApplication
@@ -44,8 +43,12 @@ class FactsListingFragment : Fragment(), FactsListingView {
     lateinit var loadMoreProgressBar: ProgressBar
     @BindView(R.id.rltv_no_data)
     lateinit var noDataRelativeLayout: RelativeLayout
+    @BindView(R.id.rltv_no_internet_connection)
+    lateinit var noInternetRelativeLayout: RelativeLayout
+
     @BindView(R.id.sb_facts_length)
     lateinit var factsLengthSeekBar: SeekBar
+
     @BindView(R.id.txt_selected_length)
     lateinit var selectedContentLengthTextView: TextView
     @BindView(R.id.rclr_facts)
@@ -95,6 +98,7 @@ class FactsListingFragment : Fragment(), FactsListingView {
     override fun showLoading() {
         loadingRelativeLayout.visibility = View.VISIBLE
         noDataRelativeLayout.visibility = View.GONE
+        noInternetRelativeLayout.visibility = View.GONE
     }
 
     override fun showNoFacts() {
@@ -114,9 +118,20 @@ class FactsListingFragment : Fragment(), FactsListingView {
     }
 
     override fun showError() {
+
     }
 
     override fun showNoInternetConnection() {
+        noInternetRelativeLayout.visibility = View.VISIBLE
+    }
+
+    override fun showCantLoadMoreNoInternet() {
+
+        makeToast(R.string.cant_load_more_no_internet)
+    }
+
+    private fun makeToast(@StringRes msg: Int) {
+        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
     }
 
     /**
@@ -141,6 +156,7 @@ class FactsListingFragment : Fragment(), FactsListingView {
      */
     private val onFactItemClickListener = object : FactsListingAdapter.FactItemOnClickListener {
         override fun onShareClicked(item: CatFact) {
+            mListener?.onShareFactClicked(item)
         }
 
         override fun onItemClicked(item: CatFact) {
@@ -180,6 +196,10 @@ class FactsListingFragment : Fragment(), FactsListingView {
         }
     }
 
+    @OnClick(R.id.img_no_internet, R.id.tv_no_internet)
+    fun tryAgain() {
+        presenter.loadMoreItems()
+    }
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -209,6 +229,7 @@ class FactsListingFragment : Fragment(), FactsListingView {
      */
     interface OnFragmentInteractionListener {
         fun onFactClicked(catFact: CatFact)
+        fun onShareFactClicked(catFact: CatFact)
     }
 
     companion object {
