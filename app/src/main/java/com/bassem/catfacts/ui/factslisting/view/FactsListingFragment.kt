@@ -9,6 +9,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
+import android.widget.RelativeLayout
 import android.widget.SeekBar
 import android.widget.TextView
 import butterknife.BindView
@@ -36,14 +38,19 @@ import javax.inject.Inject
  * create an instance of this fragment.
  */
 class FactsListingFragment : Fragment(), FactsListingView {
-
-
+    @BindView(R.id.rltv_loading)
+    lateinit var loadingRelativeLayout: RelativeLayout
+    @BindView(R.id.prgrs_loading_more)
+    lateinit var loadMoreProgressBar: ProgressBar
+    @BindView(R.id.rltv_no_data)
+    lateinit var noDataRelativeLayout: RelativeLayout
     @BindView(R.id.sb_facts_length)
     lateinit var factsLengthSeekBar: SeekBar
     @BindView(R.id.txt_selected_length)
     lateinit var selectedContentLengthTextView: TextView
     @BindView(R.id.rclr_facts)
     lateinit var factsRecyclerView: LoadMoreRecyclerView
+
     var adapter: FactsListingAdapter? = null
     @Inject
     lateinit var presenter: FactsListingPresenter
@@ -86,12 +93,24 @@ class FactsListingFragment : Fragment(), FactsListingView {
     }
 
     override fun showLoading() {
+        loadingRelativeLayout.visibility = View.VISIBLE
+        noDataRelativeLayout.visibility = View.GONE
     }
 
     override fun showNoFacts() {
+        noDataRelativeLayout.visibility = View.VISIBLE
     }
 
     override fun hideLoading() {
+
+        loadingRelativeLayout.visibility = View.GONE
+        loadMoreProgressBar.visibility = View.GONE
+
+
+    }
+
+    override fun showLoadingMore() {
+        loadMoreProgressBar.visibility = View.VISIBLE
     }
 
     override fun showError() {

@@ -36,19 +36,32 @@ class FactsListingPresenterImpl(val factsView: FactsListingView,
             return
         }
         currentPage++
+
         isLoading = true
+        if (currentPage == 1) {
+            factsView.showLoading()
+        } else {
+            factsView.showLoadingMore();
+        }
         factsInteractor.getCatFacts(maxLength, pageSize, currentPage)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ res: CatFactsResponse ->
+
+                    factsView.hideLoading()
                     isLoading = false
-                    if (res != null) {
+                    if (res != null && res.data?.isNotEmpty()) {
                         lastPage = res.lastPage
                         //update view
                         factsView.updateFacts(res.data)
 
+
+                    }else{
+                        factsView.showNoFacts()
                     }
                 }, {
+
+                    factsView.hideLoading()
                     isLoading = false
                     factsView.showError()
                 })

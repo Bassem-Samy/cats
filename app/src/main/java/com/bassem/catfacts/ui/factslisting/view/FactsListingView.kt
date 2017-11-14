@@ -12,4 +12,5 @@ interface FactsListingView : BaseView {
     fun showNoFacts()
     fun showError()
     fun updateFacts(items: List<CatFact>)
+    fun showLoadingMore()
 }

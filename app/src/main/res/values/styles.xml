@@ -8,4 +8,14 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="titleTextStyle">
+        <item name="android:layout_marginStart">@dimen/title_horizontal_margin</item>
+        <item name="android:textSize">@dimen/titleTextSize</item>
+        <item name="android:layout_marginTop">@dimen/title_vertical_margin</item>
+        <item name="android:layout_marginBottom">@dimen/title_vertical_margin</item>
+    </style>
+
+    <dimen name="title_horizontal_margin">15dp</dimen>
+    <dimen name="titleTextSize">18sp</dimen>
+    <dimen name="title_vertical_margin">10dp</dimen>
 </resources>

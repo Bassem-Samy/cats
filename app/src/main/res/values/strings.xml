@@ -2,4 +2,7 @@
     <string name="app_name">CatFacts</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="content_length_title">Content Length:</string>
+    <string name="loading_facts">Loading facts, please wait ...</string>
+    <string name="no_data_with_that_content_length">There is no data with that content length</string>
 </resources>

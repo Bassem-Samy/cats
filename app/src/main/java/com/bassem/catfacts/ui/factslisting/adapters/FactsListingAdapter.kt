@@ -57,7 +57,7 @@ class FactsListingAdapter(factItemOnClickListener: FactItemOnClickListener) : Re
         lateinit var factTextView: TextView
 
         @OnClick(R.id.frm_share)
-        fun onShareClicked(v: View) {
+        fun onShareClicked() {
             Log.e("position", Integer.toString(adapterPosition))
             val item: CatFact? = dataSet?.get(adapterPosition)
             if (item != null && onItemClickListener != null) {

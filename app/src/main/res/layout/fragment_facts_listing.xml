@@ -4,12 +4,19 @@
     android:layout_height="match_parent"
     tools:context="com.bassem.catfacts.ui.factslisting.view.FactsListingFragment">
 
+    <TextView
+        android:id="@+id/tv_content_length"
+        style="@style/titleTextStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:text="@string/content_length_title" />
 
     <SeekBar
         android:id="@+id/sb_facts_length"
         android:layout_width="match_parent"
-
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_content_length" />
 
     <TextView
         android:id="@+id/txt_selected_length"
@@ -17,11 +24,71 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/sb_facts_length"
         android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/margin5"
         tools:text="100" />
 
     <com.bassem.catfacts.ui.controls.LoadMoreRecyclerView
+        android:id="@+id/rclr_facts"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@+id/prgrs_loading_more"
         android:layout_below="@id/txt_selected_length"
-        android:id="@+id/rclr_facts"></com.bassem.catfacts.ui.controls.LoadMoreRecyclerView>
+        android:layout_marginEnd="@dimen/margin15"
+        android:layout_marginStart="@dimen/margin15"></com.bassem.catfacts.ui.controls.LoadMoreRecyclerView>
+
+    <ProgressBar
+        android:id="@+id/prgrs_loading_more"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="@dimen/margin15"
+        android:layout_marginStart="@dimen/margin15"
+        android:indeterminate="true"
+        android:visibility="gone" />
+
+    <RelativeLayout
+        android:id="@+id/rltv_loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/tv_loading"
+            android:layout_centerHorizontal="true" />
+
+        <TextView
+            android:id="@+id/tv_loading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_margin="@dimen/margin5"
+            android:gravity="center"
+            android:text="@string/loading_facts" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:visibility="gone"
+        android:id="@+id/rltv_no_data"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/tv_no_data"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/cat" />
+
+        <TextView
+            android:id="@+id/tv_no_data"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_margin="@dimen/margin5"
+            android:gravity="center"
+            android:text="@string/no_data_with_that_content_length" />
+    </RelativeLayout>
 </RelativeLayout>
