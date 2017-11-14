@@ -22,7 +22,7 @@ public class CatFactsApplication extends Application {
         initAppComponent();
     }
 
-    private void initAppComponent() {
+    public void initAppComponent() {
         applicationComponent = DaggerApplicationComponent.builder()
                 .applicationModule(new ApplicationModule(this, Constants.BASE_URL))
                 .build();

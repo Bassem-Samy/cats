@@ -6,5 +6,8 @@ package com.bassem.catfacts.utils;
  */
 
 public class Constants {
-    public static String BASE_URL="https://catfact.ninja/";
+    public static String BASE_URL = "https://catfact.ninja/";
+
+    public static long SEEK_BAR_WAIT_TIME_IN_MILLIS = 250L;
+
 }

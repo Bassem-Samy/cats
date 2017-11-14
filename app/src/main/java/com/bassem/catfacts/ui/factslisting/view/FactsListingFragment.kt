@@ -22,6 +22,7 @@ import com.bassem.catfacts.ui.factslisting.adapters.FactsListingAdapter
 import com.bassem.catfacts.ui.factslisting.di.FactsListingModule
 import com.bassem.catfacts.ui.factslisting.models.CatFact
 import com.bassem.catfacts.ui.factslisting.presenter.FactsListingPresenter
+import com.bassem.catfacts.utils.Constants
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import java.util.*
@@ -83,7 +84,7 @@ class FactsListingFragment : Fragment(), FactsListingView {
     private fun initializeFactsContentSeekBar() {
         factsLengthSeekBar.max = FACTS_MAX_CONTENT
         presenter.loadMoreItems()
-        createSeekBarObservable().debounce(SEEK_BAR_WAIT_TIME_IN_MILLIS, TimeUnit.MILLISECONDS)
+        createSeekBarObservable().debounce(Constants.SEEK_BAR_WAIT_TIME_IN_MILLIS, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ t1 ->
                     Log.e("t1", t1.toString())
@@ -118,7 +119,7 @@ class FactsListingFragment : Fragment(), FactsListingView {
     }
 
     override fun showError() {
-
+        makeToast(R.string.general_error)
     }
 
     override fun showNoInternetConnection() {
@@ -234,7 +235,6 @@ class FactsListingFragment : Fragment(), FactsListingView {
 
     companion object {
 
-        val SEEK_BAR_WAIT_TIME_IN_MILLIS = 250L
         val TAG: String = "facts_listing_fragment"
 
         val PAGE_SIZE: Int = 20
