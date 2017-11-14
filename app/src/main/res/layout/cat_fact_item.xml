@@ -13,8 +13,9 @@
             android:id="@+id/txt_fact"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
-            android:layout_margin="@dimen/margin10"
+            android:padding="@dimen/padding10"
+            android:background="@drawable/ripple_background"
+            android:ellipsize="end"
             android:maxLines="@integer/fact_list_item_max_lines" />
 
         <FrameLayout
