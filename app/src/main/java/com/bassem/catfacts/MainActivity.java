@@ -42,8 +42,11 @@ public class MainActivity extends AppCompatActivity implements FactsListingFragm
     public void onShareFactClicked(CatFact catFact) {
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.putExtra(Intent.EXTRA_TEXT, catFact.getFact());
+        shareIntent.setType("text/plain");
+
         if (shareIntent.resolveActivity(getPackageManager()) != null) {
-            startActivity(Intent.createChooser(shareIntent, getString(R.string.share_fact)));
+          //  startActivity(Intent.createChooser(shareIntent, getString(R.string.share_fact)));
+            startActivity(shareIntent);
         } else {
             showToast(R.string.no_app_to_share_to);
         }
